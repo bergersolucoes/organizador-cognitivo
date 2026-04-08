@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, displayName?: string) => {
+  const signUp = useCallback(async (email: string, password: string, displayName?: string) => {
     return supabase.auth.signUp({
       email,
       password,
@@ -46,24 +46,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         data: { display_name: displayName },
       },
     });
-  };
+  }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     return supabase.auth.signInWithPassword({ email, password });
-  };
+  }, []);
 
-  const signOut = async () => {
+  const signOut = useCallback(async () => {
     await supabase.auth.signOut();
-  };
+  }, []);
 
-  const resetPassword = async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     return supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
-  };
+  }, []);
+
+  const value = useMemo(() => ({
+    user, session, loading, signUp, signIn, signOut, resetPassword
+  }), [user, session, loading, signUp, signIn, signOut, resetPassword]);
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signUp, signIn, signOut, resetPassword }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
