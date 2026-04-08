@@ -38,6 +38,18 @@ const emotions = [
   'Indignação', 'Desamparo', 'Determinação', 'Curiosidade', 'Compaixão',
 ];
 
+const Section = ({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) => (
+  <Collapsible defaultOpen={defaultOpen}>
+    <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-sm font-medium text-foreground hover:text-copper transition-colors group">
+      <span>{title}</span>
+      <ChevronDown className="h-4 w-4 text-muted-foreground group-data-[state=open]:rotate-180 transition-transform" />
+    </CollapsibleTrigger>
+    <CollapsibleContent className="space-y-4 pb-4">
+      {children}
+    </CollapsibleContent>
+  </Collapsible>
+);
+
 const JournalForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -88,18 +100,6 @@ const JournalForm = () => {
       navigate('/app/diario');
     }
   };
-
-  const Section = ({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) => (
-    <Collapsible defaultOpen={defaultOpen}>
-      <CollapsibleTrigger className="flex items-center justify-between w-full py-3 text-sm font-medium text-foreground hover:text-copper transition-colors group">
-        <span>{title}</span>
-        <ChevronDown className="h-4 w-4 text-muted-foreground group-data-[state=open]:rotate-180 transition-transform" />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-4 pb-4">
-        {children}
-      </CollapsibleContent>
-    </Collapsible>
-  );
 
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">
